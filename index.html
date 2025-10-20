@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chá de Casa Nova - Bruna e Daniel</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lista de Presentes 🎁</title>
   <style>
     body {
       font-family: "Poppins", sans-serif;
@@ -75,7 +75,7 @@
     .btn-escolher {
       display: inline-block;
       margin-top: 15px;
-      background-color: #cbb89d;
+      background-color: #25D366;
       color: #fff;
       padding: 10px 16px;
       border: none;
@@ -86,7 +86,7 @@
     }
 
     .btn-escolher:hover {
-      background-color: #b89f7a;
+      background-color: #1da955;
     }
 
     .item.escolhido {
@@ -104,6 +104,17 @@
       padding: 5px 10px;
       border-radius: 5px;
       font-size: 0.8em;
+    }
+
+    .erro {
+      background: #ffdddd;
+      color: #900;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      margin: 20px;
+      display: none;
     }
 
     .whatsapp-container {
@@ -131,17 +142,19 @@
 
   <header>
     <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80" alt="Decoração de Casa Nova">
-    <h1>Chá de Casa Nova da Bruna & Daniel</h1>
-    <p>💛 Seja bem-vindo(a)! Escolha um presente para nos ajudar a montar nosso novo lar com amor e carinho.</p>
+    <h1>Chá de Casa Nova 🎉</h1>
+    <p>💛 Escolha um presente pra ajudar a montar o novo lar com amor e carinho!</p>
   </header>
+
+  <div id="erro" class="erro"></div>
 
   <div class="container" id="lista-presentes"></div>
 
   <div class="whatsapp-container">
-    <a class="whatsapp-btn" 
-       href="https://wa.me/5511950392090?text=Oi%20Bruna%20e%20Daniel!%20Acabei%20de%20escolher%20um%20presente%20no%20Ch%C3%A1%20de%20Casa%20Nova%20de%20voc%C3%AAs%20🥰" 
+    <a class="whatsapp-btn"
+       href="https://wa.me/5511950392090?text=Oi!%20Acabei%20de%20ver%20a%20lista%20de%20presentes%20🥰"
        target="_blank">
-       💌 Enviar mensagem aos noivos
+       💬 Falar no WhatsApp
     </a>
   </div>
 
@@ -150,73 +163,48 @@
       { nome: "Mop Giratório 8 Litros Fit", link: "https://s.shopee.com.br/AUlWWlxNPO" },
       { nome: "Rodo Limpador De Silicone Mágico", link: "https://s.shopee.com.br/qb117DgJm" },
       { nome: "Gancho Multiuso Suporte Com Adesivo", link: "https://s.shopee.com.br/60J7Ad2PMY" },
-      { nome: "Escova de Silicone para Vaso Sanitário", link: "https://s.shopee.com.br/3VbmC377c9" },
       { nome: "Varal Dobrável Inox", link: "https://s.shopee.com.br/4VUJNuG6tG" },
-      { nome: "Kit Banheiro Lavabo 3 peças", link: "https://s.shopee.com.br/gHaosUIbX" },
-      { nome: "Mesa Prateleira de Sacada", link: "https://s.shopee.com.br/4ArSzKlRC7" },
-      { nome: "Kit Rodinho de Pia", link: "https://s.shopee.com.br/BLKDzmzfp" },
-      { nome: "Pratos de Sobremesa Nadir Duralex", link: "https://s.shopee.com.br/5VMqZoJUEH" },
-      { nome: "Jogo de Pratos Duralex", link: "https://s.shopee.com.br/VyAcdOzFc" },
-      { nome: "Suporte Porta Vassoura", link: "https://s.shopee.com.br/8ANbkjvKO2" },
-      { nome: "Cesto com Alça Multiuso", link: "https://s.shopee.com.br/1gA80oO4JI" },
-      { nome: "Porta Chaves MDF", link: "https://s.shopee.com.br/1gA80pJKjz" },
       { nome: "Jogo de Taças Diamante 340ml", link: "https://s.shopee.com.br/4fnjaM32ZQ" },
-      { nome: "Kit Tapete Passadeira", link: "https://s.shopee.com.br/9AG8wdYJ2m" },
-      { nome: "Ganchos de Parede Multiuso", link: "https://s.shopee.com.br/1qTYDBZ5Ob" },
-      { nome: "Conjunto de 5 Potes Herméticos", link: "https://s.shopee.com.br/10uRDhAZzy" },
-      { nome: "Kit 10 Cestos Organizadores", link: "https://s.shopee.com.br/3Ayvni1alx" },
-      { nome: "Cortina Blackout com Voil", link: "https://s.shopee.com.br/3qEcaxKa2h" },
-      { nome: "Tapete Banheiro Oval", link: "https://s.shopee.com.br/3AyvnkR77H" },
-      { nome: "Tapete Piso Saída Box", link: "https://s.shopee.com.br/5VMqa34czS" },
-      { nome: "Cesto de Lixo 5L", link: "https://s.shopee.com.br/9KZZ96pdAQ" },
-      { nome: "Cesto de Roupa Rattan 50L", link: "https://s.shopee.com.br/70BeMpcBDM" },
-      { nome: "Suporte Banheiro Adesivo", link: "https://s.shopee.com.br/20myPfyjm" },
-      { nome: "Fruteira Cesta Aramada", link: "https://s.shopee.com.br/9fCPXmiLXF" },
-      { nome: "Organizador de Armário (5 unid.)", link: "https://br.shp.ee/ngoyjV1" },
-      { nome: "Luva de Silicone Térmica", link: "https://br.shp.ee/fS5XHfs" },
-      { nome: "Organizador de Gavetas", link: "https://br.shp.ee/Sghxo4m" },
-      { nome: "Jogo 6 Copos de Vidro Adhara", link: "https://br.shp.ee/KYnyZ1D" },
-      { nome: "Porta Frios Triplo Acrílico", link: "https://br.shp.ee/eWZJyiQ" }
+      { nome: "Cesto de Lixo 5L", link: "https://s.shopee.com.br/9KZZ96pdAQ" }
     ];
 
     const container = document.getElementById("lista-presentes");
-    const escolhidos = JSON.parse(localStorage.getItem("presentesEscolhidos")) || [];
+    const erroBox = document.getElementById("erro");
 
-    function salvarEscolhas() {
-      localStorage.setItem("presentesEscolhidos", JSON.stringify(escolhidos));
+    // ✅ Carrega lista (funciona 100% sem banco)
+    function carregarLista() {
+      container.innerHTML = "";
+      itens.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "item";
+
+        const nome = document.createElement("h3");
+        nome.textContent = item.nome;
+
+        const link = document.createElement("a");
+        link.href = item.link;
+        link.target = "_blank";
+        link.textContent = "Ver produto";
+
+        const botao = document.createElement("button");
+        botao.textContent = "📱 Confirmar no WhatsApp";
+        botao.className = "btn-escolher";
+        botao.onclick = () => abrirZap(item.nome, item.link);
+
+        card.appendChild(nome);
+        card.appendChild(link);
+        card.appendChild(botao);
+
+        container.appendChild(card);
+      });
     }
 
-    itens.forEach((item) => {
-      const card = document.createElement("div");
-      card.className = "item";
-      if (escolhidos.includes(item.link)) card.classList.add("escolhido");
+    function abrirZap(nome, link) {
+      const msg = encodeURIComponent(`Oi! Quero confirmar que escolhi o presente: ${nome} (${link})`);
+      window.open(`https://wa.me/5511950392090?text=${msg}`, "_blank");
+    }
 
-      const nome = document.createElement("h3");
-      nome.textContent = item.nome;
-
-      const link = document.createElement("a");
-      link.href = item.link;
-      link.target = "_blank";
-      link.textContent = "Ver na Shopee";
-
-      const botao = document.createElement("button");
-      botao.textContent = "Escolher este presente 🎁";
-      botao.className = "btn-escolher";
-
-      botao.addEventListener("click", () => {
-        if (!escolhidos.includes(item.link)) {
-          escolhidos.push(item.link);
-          salvarEscolhas();
-          card.classList.add("escolhido");
-          botao.disabled = true;
-        }
-      });
-
-      card.appendChild(nome);
-      card.appendChild(link);
-      card.appendChild(botao);
-      container.appendChild(card);
-    });
+    carregarLista();
   </script>
 
 </body>
