@@ -29,6 +29,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      position: relative;
     }
     .item img {
       width: 100%;
@@ -64,7 +65,6 @@
     .escolhido {
       opacity: 0.5;
       pointer-events: none;
-      position: relative;
     }
     .escolhido::after {
       content: "🎁 Já escolhido!";
@@ -88,7 +88,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.15.0/firebase-firestore-compat.js"></script>
 
   <script>
-    // CONFIGURAÇÃO DO FIREBASE (substitui pelos seus dados)
+    // CONFIGURAÇÃO DO FIREBASE (coloca os seus dados aqui)
     const firebaseConfig = {
       apiKey: "SUA_API_KEY",
       authDomain: "SEU_PROJETO.firebaseapp.com",
@@ -113,14 +113,22 @@
     async function carregarLista() {
       lista.innerHTML = "";
 
-      const snap = await db.collection("presentesEscolhidos").get();
-      const escolhidos = snap.docs.map(doc => doc.id);
+      let escolhidos = [];
+      try {
+        const snap = await db.collection("presentesEscolhidos").get();
+        escolhidos = snap.docs
+          .map(doc => doc.id)
+          .filter(id => id && typeof id === "string"); // ignora bug
+      } catch (e) {
+        console.error("Erro ao carregar presentes escolhidos:", e);
+      }
 
       itens.forEach(item => {
         const card = document.createElement("div");
         card.className = "item";
+        const id = btoa(item.link);
 
-        if (escolhidos.includes(btoa(item.link))) {
+        if (escolhidos.includes(id)) {
           card.classList.add("escolhido");
         }
 
@@ -128,7 +136,9 @@
           <img src="${item.img}" alt="${item.nome}">
           <h3>${item.nome}</h3>
           <a href="${item.link}" target="_blank">Ver produto</a>
-          <button onclick="abrirZap('${item.nome}', '${item.link}')" ${escolhidos.includes(btoa(item.link)) ? "disabled" : ""}>📱 Confirmar no WhatsApp</button>
+          <button onclick="abrirZap('${item.nome}', '${item.link}')" ${escolhidos.includes(id) ? "disabled" : ""}>
+            📱 Confirmar no WhatsApp
+          </button>
         `;
 
         lista.appendChild(card);
@@ -139,14 +149,21 @@
       const confirmar = confirm(`Você quer escolher o presente: ${nome}?`);
       if (!confirmar) return;
 
-      await db.collection("presentesEscolhidos").doc(btoa(link)).set({
-        nome: nome,
-        link: link,
-        escolhidoEm: new Date()
-      });
+      try {
+        await db.collection("presentesEscolhidos").doc(btoa(link)).set({
+          nome: nome,
+          link: link,
+          escolhidoEm: new Date()
+        });
 
-      const msg = encodeURIComponent(`Oi! Quero confirmar que escolhi o presente: ${nome} (${link})`);
-      window.open(`https://wa.me/5511999999999?text=${msg}`, "_blank"); // <— coloca seu número de zap aqui
+        const msg = encodeURIComponent(`Oi! Quero confirmar que escolhi o presente: ${nome} (${link})`);
+        window.open(`https://wa.me/5511999999999?text=${msg}`, "_blank"); // coloca seu número real aqui
+
+        alert("Presente confirmado com sucesso!");
+      } catch (e) {
+        console.error("Erro ao salvar no Firebase:", e);
+        alert("Erro ao confirmar o presente.");
+      }
 
       carregarLista();
     }
