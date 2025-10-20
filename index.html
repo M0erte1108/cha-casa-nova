@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lista de Presentes</title>
+  <title>Lista de Presentes 🎁</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -14,6 +14,16 @@
     h1 {
       text-align: center;
       color: #333;
+    }
+    .erro {
+      background: #ffdddd;
+      color: #900;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+      display: none;
     }
     .grid {
       display: grid;
@@ -45,9 +55,6 @@
       text-decoration: none;
       font-weight: bold;
     }
-    .item a:hover {
-      text-decoration: underline;
-    }
     button {
       background: #25D366;
       color: #fff;
@@ -56,8 +63,8 @@
       padding: 10px;
       cursor: pointer;
       font-weight: bold;
-      transition: 0.2s;
       margin-top: 8px;
+      transition: 0.2s;
     }
     button:hover {
       background: #1ebe5d;
@@ -81,6 +88,7 @@
 </head>
 <body>
   <h1>Lista de Presentes 🎉</h1>
+  <div id="erro" class="erro"></div>
   <div class="grid" id="lista"></div>
 
   <!-- Firebase -->
@@ -88,7 +96,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.15.0/firebase-firestore-compat.js"></script>
 
   <script>
-    // CONFIGURAÇÃO DO FIREBASE (coloca os seus dados aqui)
+    const erroBox = document.getElementById("erro");
+
+    // ⚙️ CONFIGURAÇÃO DO FIREBASE — coloca a tua aqui!
     const firebaseConfig = {
       apiKey: "SUA_API_KEY",
       authDomain: "SEU_PROJETO.firebaseapp.com",
@@ -98,8 +108,15 @@
       appId: "SEU_APP_ID"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
+    let db;
+    try {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.firestore();
+    } catch (err) {
+      erroBox.style.display = "block";
+      erroBox.innerText = "⚠️ Firebase não configurado. Complete as credenciais!";
+      console.error("Erro Firebase:", err);
+    }
 
     const lista = document.getElementById("lista");
 
@@ -112,59 +129,64 @@
 
     async function carregarLista() {
       lista.innerHTML = "";
-
       let escolhidos = [];
-      try {
-        const snap = await db.collection("presentesEscolhidos").get();
-        escolhidos = snap.docs
-          .map(doc => doc.id)
-          .filter(id => id && typeof id === "string"); // ignora bug
-      } catch (e) {
-        console.error("Erro ao carregar presentes escolhidos:", e);
+
+      if (!db) {
+        mostrarItensSemFirebase();
+        return;
       }
 
-      itens.forEach(item => {
-        const card = document.createElement("div");
-        card.className = "item";
-        const id = btoa(item.link);
+      try {
+        const snap = await db.collection("presentesEscolhidos").get();
+        escolhidos = snap.docs.map(doc => doc.id);
+      } catch (e) {
+        erroBox.style.display = "block";
+        erroBox.innerText = "Erro ao carregar lista. Verifique conexão.";
+        console.error("Erro Firestore:", e);
+      }
 
-        if (escolhidos.includes(id)) {
-          card.classList.add("escolhido");
-        }
+      itens.forEach(item => criarCard(item, escolhidos.includes(btoa(item.link))));
+    }
 
-        card.innerHTML = `
-          <img src="${item.img}" alt="${item.nome}">
-          <h3>${item.nome}</h3>
-          <a href="${item.link}" target="_blank">Ver produto</a>
-          <button onclick="abrirZap('${item.nome}', '${item.link}')" ${escolhidos.includes(id) ? "disabled" : ""}>
-            📱 Confirmar no WhatsApp
-          </button>
-        `;
+    function mostrarItensSemFirebase() {
+      itens.forEach(item => criarCard(item, false));
+    }
 
-        lista.appendChild(card);
-      });
+    function criarCard(item, escolhido) {
+      const card = document.createElement("div");
+      card.className = "item";
+      if (escolhido) card.classList.add("escolhido");
+
+      card.innerHTML = `
+        <img src="${item.img}" alt="${item.nome}">
+        <h3>${item.nome}</h3>
+        <a href="${item.link}" target="_blank">Ver produto</a>
+        <button onclick="abrirZap('${item.nome}', '${item.link}')" ${escolhido ? "disabled" : ""}>
+          📱 Confirmar no WhatsApp
+        </button>
+      `;
+      lista.appendChild(card);
     }
 
     async function abrirZap(nome, link) {
+      if (!db) {
+        alert("⚠️ O sistema não está conectado. Apenas visualização disponível.");
+        return;
+      }
+
       const confirmar = confirm(`Você quer escolher o presente: ${nome}?`);
       if (!confirmar) return;
 
-      try {
-        await db.collection("presentesEscolhidos").doc(btoa(link)).set({
-          nome: nome,
-          link: link,
-          escolhidoEm: new Date()
-        });
+      await db.collection("presentesEscolhidos").doc(btoa(link)).set({
+        nome,
+        link,
+        escolhidoEm: new Date()
+      });
 
-        const msg = encodeURIComponent(`Oi! Quero confirmar que escolhi o presente: ${nome} (${link})`);
-        window.open(`https://wa.me/5511999999999?text=${msg}`, "_blank"); // coloca seu número real aqui
+      const msg = encodeURIComponent(`Oi! Quero confirmar que escolhi o presente: ${nome} (${link})`);
+      window.open(`https://wa.me/5511999999999?text=${msg}`, "_blank");
 
-        alert("Presente confirmado com sucesso!");
-      } catch (e) {
-        console.error("Erro ao salvar no Firebase:", e);
-        alert("Erro ao confirmar o presente.");
-      }
-
+      alert("Presente confirmado com sucesso!");
       carregarLista();
     }
 
