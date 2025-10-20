@@ -1,196 +1,223 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lista de Presentes 🎁</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chá de Casa Nova - Bruna e Daniel</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f3f3f3;
+      font-family: "Poppins", sans-serif;
+      background-color: #f8f6f2;
+      color: #4a403a;
       margin: 0;
-      padding: 20px;
+      padding: 0;
     }
-    h1 {
+
+    header {
       text-align: center;
-      color: #333;
+      background-color: #f4e9db;
+      padding-bottom: 30px;
     }
-    .erro {
-      background: #ffdddd;
-      color: #900;
-      padding: 10px;
-      border-radius: 8px;
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 15px;
-      display: none;
+
+    header img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-bottom: 3px solid #d1bfa7;
     }
-    .grid {
+
+    header h1 {
+      font-size: 2em;
+      margin: 20px 0 10px 0;
+      color: #4a403a;
+    }
+
+    header p {
+      font-size: 1.1em;
+      color: #5a524c;
+      margin: 0 20px;
+    }
+
+    .container {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 20px;
-      margin-top: 20px;
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
     }
+
     .item {
-      background: #fff;
-      border-radius: 12px;
-      padding: 15px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      padding: 20px;
+      transition: transform 0.2s ease;
       position: relative;
     }
-    .item img {
-      width: 100%;
-      border-radius: 8px;
+
+    .item:hover {
+      transform: translateY(-3px);
     }
+
     .item h3 {
-      font-size: 1.1rem;
-      margin: 10px 0 5px;
-      color: #222;
+      font-size: 1.1em;
+      margin-bottom: 10px;
+      color: #3b322c;
     }
+
     .item a {
-      color: #0077ff;
+      color: #937b61;
       text-decoration: none;
-      font-weight: bold;
+      font-weight: 500;
     }
-    button {
-      background: #25D366;
+
+    .btn-escolher {
+      display: inline-block;
+      margin-top: 15px;
+      background-color: #cbb89d;
       color: #fff;
+      padding: 10px 16px;
       border: none;
-      border-radius: 8px;
-      padding: 10px;
+      border-radius: 6px;
       cursor: pointer;
-      font-weight: bold;
-      margin-top: 8px;
-      transition: 0.2s;
+      font-size: 0.9em;
+      transition: background 0.2s;
     }
-    button:hover {
-      background: #1ebe5d;
+
+    .btn-escolher:hover {
+      background-color: #b89f7a;
     }
-    .escolhido {
+
+    .item.escolhido {
       opacity: 0.5;
       pointer-events: none;
     }
-    .escolhido::after {
-      content: "🎁 Já escolhido!";
+
+    .item.escolhido::after {
+      content: "🎁 Já Escolhido";
       position: absolute;
       top: 10px;
       right: 10px;
-      background: red;
+      background: #b89f7a;
       color: white;
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.9rem;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 0.8em;
+    }
+
+    .whatsapp-container {
+      text-align: center;
+      margin: 30px 0 60px 0;
+    }
+
+    .whatsapp-btn {
+      background-color: #25D366;
+      color: white;
+      font-size: 1em;
+      padding: 14px 26px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background 0.2s;
+      display: inline-block;
+    }
+
+    .whatsapp-btn:hover {
+      background-color: #1da955;
     }
   </style>
 </head>
 <body>
-  <h1>Lista de Presentes 🎉</h1>
-  <div id="erro" class="erro"></div>
-  <div class="grid" id="lista"></div>
 
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/10.15.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.15.0/firebase-firestore-compat.js"></script>
+  <header>
+    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=80" alt="Decoração de Casa Nova">
+    <h1>Chá de Casa Nova da Bruna & Daniel</h1>
+    <p>💛 Seja bem-vindo(a)! Escolha um presente para nos ajudar a montar nosso novo lar com amor e carinho.</p>
+  </header>
+
+  <div class="container" id="lista-presentes"></div>
+
+  <div class="whatsapp-container">
+    <a class="whatsapp-btn" 
+       href="https://wa.me/5511950392090?text=Oi%20Bruna%20e%20Daniel!%20Acabei%20de%20escolher%20um%20presente%20no%20Ch%C3%A1%20de%20Casa%20Nova%20de%20voc%C3%AAs%20🥰" 
+       target="_blank">
+       💌 Enviar mensagem aos noivos
+    </a>
+  </div>
 
   <script>
-    const erroBox = document.getElementById("erro");
-
-    // ⚙️ CONFIGURAÇÃO DO FIREBASE — coloca a tua aqui!
-    const firebaseConfig = {
-      apiKey: "SUA_API_KEY",
-      authDomain: "SEU_PROJETO.firebaseapp.com",
-      projectId: "SEU_PROJETO",
-      storageBucket: "SEU_PROJETO.appspot.com",
-      messagingSenderId: "SEU_SENDER_ID",
-      appId: "SEU_APP_ID"
-    };
-
-    let db;
-    try {
-      firebase.initializeApp(firebaseConfig);
-      db = firebase.firestore();
-    } catch (err) {
-      erroBox.style.display = "block";
-      erroBox.innerText = "⚠️ Firebase não configurado. Complete as credenciais!";
-      console.error("Erro Firebase:", err);
-    }
-
-    const lista = document.getElementById("lista");
-
     const itens = [
-      { nome: "Jogo de Panelas Tramontina", link: "https://www.magazineluiza.com.br", img: "https://m.media-amazon.com/images/I/81x2q5rQ0IL._AC_SL1500_.jpg" },
-      { nome: "Conjunto de Toalhas", link: "https://www.amazon.com.br", img: "https://m.media-amazon.com/images/I/61jPHzJ1plL._AC_SL1000_.jpg" },
-      { nome: "Ventilador Arno Turbo", link: "https://www.casasbahia.com.br", img: "https://m.media-amazon.com/images/I/61WmXvXcd8L._AC_SL1500_.jpg" },
-      { nome: "Liquidificador Philips Walita", link: "https://www.americanas.com.br", img: "https://m.media-amazon.com/images/I/71t8A8dCpwL._AC_SL1500_.jpg" }
+      { nome: "Mop Giratório 8 Litros Fit", link: "https://s.shopee.com.br/AUlWWlxNPO" },
+      { nome: "Rodo Limpador De Silicone Mágico", link: "https://s.shopee.com.br/qb117DgJm" },
+      { nome: "Gancho Multiuso Suporte Com Adesivo", link: "https://s.shopee.com.br/60J7Ad2PMY" },
+      { nome: "Escova de Silicone para Vaso Sanitário", link: "https://s.shopee.com.br/3VbmC377c9" },
+      { nome: "Varal Dobrável Inox", link: "https://s.shopee.com.br/4VUJNuG6tG" },
+      { nome: "Kit Banheiro Lavabo 3 peças", link: "https://s.shopee.com.br/gHaosUIbX" },
+      { nome: "Mesa Prateleira de Sacada", link: "https://s.shopee.com.br/4ArSzKlRC7" },
+      { nome: "Kit Rodinho de Pia", link: "https://s.shopee.com.br/BLKDzmzfp" },
+      { nome: "Pratos de Sobremesa Nadir Duralex", link: "https://s.shopee.com.br/5VMqZoJUEH" },
+      { nome: "Jogo de Pratos Duralex", link: "https://s.shopee.com.br/VyAcdOzFc" },
+      { nome: "Suporte Porta Vassoura", link: "https://s.shopee.com.br/8ANbkjvKO2" },
+      { nome: "Cesto com Alça Multiuso", link: "https://s.shopee.com.br/1gA80oO4JI" },
+      { nome: "Porta Chaves MDF", link: "https://s.shopee.com.br/1gA80pJKjz" },
+      { nome: "Jogo de Taças Diamante 340ml", link: "https://s.shopee.com.br/4fnjaM32ZQ" },
+      { nome: "Kit Tapete Passadeira", link: "https://s.shopee.com.br/9AG8wdYJ2m" },
+      { nome: "Ganchos de Parede Multiuso", link: "https://s.shopee.com.br/1qTYDBZ5Ob" },
+      { nome: "Conjunto de 5 Potes Herméticos", link: "https://s.shopee.com.br/10uRDhAZzy" },
+      { nome: "Kit 10 Cestos Organizadores", link: "https://s.shopee.com.br/3Ayvni1alx" },
+      { nome: "Cortina Blackout com Voil", link: "https://s.shopee.com.br/3qEcaxKa2h" },
+      { nome: "Tapete Banheiro Oval", link: "https://s.shopee.com.br/3AyvnkR77H" },
+      { nome: "Tapete Piso Saída Box", link: "https://s.shopee.com.br/5VMqa34czS" },
+      { nome: "Cesto de Lixo 5L", link: "https://s.shopee.com.br/9KZZ96pdAQ" },
+      { nome: "Cesto de Roupa Rattan 50L", link: "https://s.shopee.com.br/70BeMpcBDM" },
+      { nome: "Suporte Banheiro Adesivo", link: "https://s.shopee.com.br/20myPfyjm" },
+      { nome: "Fruteira Cesta Aramada", link: "https://s.shopee.com.br/9fCPXmiLXF" },
+      { nome: "Organizador de Armário (5 unid.)", link: "https://br.shp.ee/ngoyjV1" },
+      { nome: "Luva de Silicone Térmica", link: "https://br.shp.ee/fS5XHfs" },
+      { nome: "Organizador de Gavetas", link: "https://br.shp.ee/Sghxo4m" },
+      { nome: "Jogo 6 Copos de Vidro Adhara", link: "https://br.shp.ee/KYnyZ1D" },
+      { nome: "Porta Frios Triplo Acrílico", link: "https://br.shp.ee/eWZJyiQ" }
     ];
 
-    async function carregarLista() {
-      lista.innerHTML = "";
-      let escolhidos = [];
+    const container = document.getElementById("lista-presentes");
+    const escolhidos = JSON.parse(localStorage.getItem("presentesEscolhidos")) || [];
 
-      if (!db) {
-        mostrarItensSemFirebase();
-        return;
-      }
-
-      try {
-        const snap = await db.collection("presentesEscolhidos").get();
-        escolhidos = snap.docs.map(doc => doc.id);
-      } catch (e) {
-        erroBox.style.display = "block";
-        erroBox.innerText = "Erro ao carregar lista. Verifique conexão.";
-        console.error("Erro Firestore:", e);
-      }
-
-      itens.forEach(item => criarCard(item, escolhidos.includes(btoa(item.link))));
+    function salvarEscolhas() {
+      localStorage.setItem("presentesEscolhidos", JSON.stringify(escolhidos));
     }
 
-    function mostrarItensSemFirebase() {
-      itens.forEach(item => criarCard(item, false));
-    }
-
-    function criarCard(item, escolhido) {
+    itens.forEach((item) => {
       const card = document.createElement("div");
       card.className = "item";
-      if (escolhido) card.classList.add("escolhido");
+      if (escolhidos.includes(item.link)) card.classList.add("escolhido");
 
-      card.innerHTML = `
-        <img src="${item.img}" alt="${item.nome}">
-        <h3>${item.nome}</h3>
-        <a href="${item.link}" target="_blank">Ver produto</a>
-        <button onclick="abrirZap('${item.nome}', '${item.link}')" ${escolhido ? "disabled" : ""}>
-          📱 Confirmar no WhatsApp
-        </button>
-      `;
-      lista.appendChild(card);
-    }
+      const nome = document.createElement("h3");
+      nome.textContent = item.nome;
 
-    async function abrirZap(nome, link) {
-      if (!db) {
-        alert("⚠️ O sistema não está conectado. Apenas visualização disponível.");
-        return;
-      }
+      const link = document.createElement("a");
+      link.href = item.link;
+      link.target = "_blank";
+      link.textContent = "Ver na Shopee";
 
-      const confirmar = confirm(`Você quer escolher o presente: ${nome}?`);
-      if (!confirmar) return;
+      const botao = document.createElement("button");
+      botao.textContent = "Escolher este presente 🎁";
+      botao.className = "btn-escolher";
 
-      await db.collection("presentesEscolhidos").doc(btoa(link)).set({
-        nome,
-        link,
-        escolhidoEm: new Date()
+      botao.addEventListener("click", () => {
+        if (!escolhidos.includes(item.link)) {
+          escolhidos.push(item.link);
+          salvarEscolhas();
+          card.classList.add("escolhido");
+          botao.disabled = true;
+        }
       });
 
-      const msg = encodeURIComponent(`Oi! Quero confirmar que escolhi o presente: ${nome} (${link})`);
-      window.open(`https://wa.me/5511999999999?text=${msg}`, "_blank");
-
-      alert("Presente confirmado com sucesso!");
-      carregarLista();
-    }
-
-    carregarLista();
+      card.appendChild(nome);
+      card.appendChild(link);
+      card.appendChild(botao);
+      container.appendChild(card);
+    });
   </script>
+
 </body>
 </html>
